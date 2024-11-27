@@ -1,0 +1,17 @@
+{
+  "name": "webflow-scripts",
+  "version": "1.0.0",
+  "description": "Custom JavaScript enhancements for Webflow",
+  "main": "dist/webflow-bundle.min.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "watch": "webpack --mode development --watch"
+  },
+  "keywords": ["webflow", "javascript"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.4"
+  }
+}
