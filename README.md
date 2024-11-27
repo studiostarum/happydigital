@@ -1,62 +1,111 @@
 # Webflow Custom Scripts
 
-This repository contains custom JavaScript files for enhancing Webflow functionality.
+A collection of custom JavaScript enhancements for Webflow websites.
 
-## Available Scripts
+## Quick Start
 
-1. **Course Accordion** (`course-accordion.js`)
-   - Automatically expands the current page's section in the course navigation sidebar
-   ```html
-   <script src="https://cdn.jsdelivr.net/gh/studiostarum/happydigital@v1.0.0/course-accordion.js"></script>
-   ```
+Add this single script tag to your Webflow project's Custom Code section (in Footer Code):
 
-2. **Custom Select** (`custom-select.js`)
-   - Enhances form select elements with custom styling and positioning
-   - Handles dropdown positioning and overflow
-   ```html
-   <script src="https://cdn.jsdelivr.net/gh/studiostarum/happydigital@v1.0.0/custom-select.js"></script>
-   ```
+```html
+<script src="https://cdn.jsdelivr.net/gh/studiostarum/happydigital@v1.2.1/dist/webflow-bundle.min.js"></script>
+```
 
-3. **Category Index** (`category-index.js`)
-   - Automatically numbers category cards with leading zeros (01, 02, etc.)
-   - Updates numbers when items are filtered or added
-   - Compatible with Finsweet CMS filters
-   ```html
-   <script src="https://cdn.jsdelivr.net/gh/studiostarum/happydigital@v1.0.0/category-index.js"></script>
-   ```
+## Features
 
-## Usage in Webflow
+### Course Accordion
+Automatically expands the current page's section in the course navigation sidebar.
+- Finds current page using `.course_sublink.w--current`
+- Expands the corresponding accordion section
+- Rotates the accordion icon
 
-Add the desired script tags to your Webflow project's Custom Code section (in Footer Code).
+### Custom Select Dropdowns
+Creates interactive, responsive custom dropdown selects.
+- Handles multiple dropdown groups
+- Smart overflow positioning
+- Smooth open/close animations
+- Closes other dropdowns when one is opened
 
-## Updating Scripts
+Required HTML attributes:
+- `data-form-element="select"` - On the select trigger element
+- `data-form-group="groupName"` - On both select and dropdown elements
+- `data-form-element="dropdown"` - On the dropdown container
 
-1. Make your changes to the desired script file
-2. Stage your changes:
+### Category Index
+Automatically numbers category cards with leading zeros (01, 02, etc.).
+- Updates numbers dynamically using MutationObserver
+- Compatible with Finsweet CMS filters
+- Target elements: `.category-card_index`
+
+## Development
+
+### Prerequisites
+- Node.js and npm installed
+- Git for version control
+
+### Project Structure
+```
+├── src/
+│   ├── index.js           # Main entry point
+│   ├── courseAccordion.js # Course navigation functionality
+│   ├── customSelect.js    # Custom select dropdowns
+│   └── categoryIndex.js   # Category card numbering
+├── dist/
+│   └── webflow-bundle.min.js  # Bundled and minified output
+├── package.json
+└── webpack.config.js
+```
+
+### Setup
+1. Clone the repository:
    ```bash
-   git add .
+   git clone https://github.com/studiostarum/happydigital.git
+   cd happydigital
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### Development Commands
+- Build the bundle:
+  ```bash
+  npm run build
+  ```
+- Watch for changes during development:
+  ```bash
+  npm run watch
+  ```
+
+### Deployment Process
+1. Make changes to files in the `src` directory
+2. Build the bundle:
+   ```bash
+   npm run build
    ```
 3. Commit your changes:
    ```bash
-   git commit -m "Your update message"
+   git add .
+   git commit -m "Your change description"
    ```
-4. Push to GitHub:
+4. Create a new version tag:
    ```bash
-   git push
+   git tag -a v1.x.x -m "Version description"
    ```
-5. Create a new version tag (increment the version number):
+5. Push to GitHub:
    ```bash
-   git tag -a v1.0.1 -m "Your tag message"
+   git push origin main --tags
    ```
-6. Push the new tag:
-   ```bash
-   git push origin v1.0.1
-   ```
-7. Update the script URLs in Webflow to use the new version number
+6. Update the script URL in your Webflow site to use the new version
+
+## Browser Support
+- Requires modern browsers with support for:
+  - ES6 features
+  - DOM manipulation
+  - MutationObserver
+  - requestAnimationFrame
 
 ## Version History
 
-- v1.0.0: Initial release
-  - Basic accordion functionality for course navigation
-  - Custom select dropdown implementation
-  - Category indexing with Finsweet integration
+- v1.2.1: Reorganize into modules with webpack bundling
+- v1.0.0: Initial release with individual scripts
