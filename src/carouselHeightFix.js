@@ -1,9 +1,10 @@
 export const initCarouselHeight = () => {
-    // Find all elements with the data attribute
-    const carousels = document.querySelectorAll('[st-element="slider"]');
+    // Find all slider masks with the data attribute
+    const sliderMasks = document.querySelectorAll('[st-element="slider"]');
 
-    carousels.forEach(carousel => {
-        const slides = carousel.querySelectorAll('.w-slide');
+    sliderMasks.forEach(sliderMask => {
+        const slides = sliderMask.querySelectorAll('.w-slide');
+        const slider = sliderMask.closest('.w-slider');
         
         const setEqualHeight = () => {
             let maxHeight = 0;
@@ -28,17 +29,19 @@ export const initCarouselHeight = () => {
         // Re-calculate heights on window resize
         window.addEventListener('resize', setEqualHeight);
 
-        // Optional: Re-run on slide change if using Webflow's native slider
-        const sliderNext = carousel.querySelector('.w-slider-arrow-right');
-        const sliderPrev = carousel.querySelector('.w-slider-arrow-left');
-        
-        if (sliderNext && sliderPrev) {
-            [sliderNext, sliderPrev].forEach(arrow => {
-                arrow.addEventListener('click', () => {
-                    // Small delay to ensure slide transition is complete
-                    setTimeout(setEqualHeight, 100);
+        // Re-run on slide change if using Webflow's native slider
+        if (slider) {
+            const sliderNext = slider.querySelector('.w-slider-arrow-right');
+            const sliderPrev = slider.querySelector('.w-slider-arrow-left');
+            
+            if (sliderNext && sliderPrev) {
+                [sliderNext, sliderPrev].forEach(arrow => {
+                    arrow.addEventListener('click', () => {
+                        // Small delay to ensure slide transition is complete
+                        setTimeout(setEqualHeight, 100);
+                    });
                 });
-            });
+            }
         }
     });
 };
