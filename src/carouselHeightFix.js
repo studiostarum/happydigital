@@ -1,4 +1,4 @@
-const initCarouselHeight = () => {
+export const initCarouselHeight = () => {
     // Find all elements with the data attribute
     const carousels = document.querySelectorAll('[st-element="slider"]');
 
@@ -45,6 +45,3 @@ const initCarouselHeight = () => {
 
 // Run on page load
 document.addEventListener('DOMContentLoaded', initCarouselHeight);
-
-// Export the function in case we need to call it from other components
-export { initCarouselHeight };
