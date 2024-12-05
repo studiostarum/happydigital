@@ -1,12 +1,10 @@
 export const initCarouselHeight = () => {
-    // Find all slider masks with the data attribute
-    const sliderMasks = document.querySelectorAll('[st-element="slider"]');
-
-    sliderMasks.forEach(sliderMask => {
-        const slides = sliderMask.querySelectorAll('.w-slide');
-        const slider = sliderMask.closest('.w-slider');
+    function setEqualHeight() {
+        // Find all slider masks with the data attribute
+        const sliderMasks = document.querySelectorAll('[st-element="slider"]');
         
-        const setEqualHeight = () => {
+        sliderMasks.forEach(sliderMask => {
+            const slides = sliderMask.querySelectorAll('.w-slide');
             let maxHeight = 0;
 
             // Reset all slides to their natural height before calculating the tallest slide
@@ -21,29 +19,14 @@ export const initCarouselHeight = () => {
             slides.forEach(slide => {
                 slide.style.height = maxHeight + 'px';
             });
-        };
+        });
+    }
 
-        // Run the function initially
-        setEqualHeight();
+    // Run the function initially
+    setEqualHeight();
 
-        // Re-calculate heights on window resize
-        window.addEventListener('resize', setEqualHeight);
-
-        // Re-run on slide change if using Webflow's native slider
-        if (slider) {
-            const sliderNext = slider.querySelector('.w-slider-arrow-right');
-            const sliderPrev = slider.querySelector('.w-slider-arrow-left');
-            
-            if (sliderNext && sliderPrev) {
-                [sliderNext, sliderPrev].forEach(arrow => {
-                    arrow.addEventListener('click', () => {
-                        // Small delay to ensure slide transition is complete
-                        setTimeout(setEqualHeight, 100);
-                    });
-                });
-            }
-        }
-    });
+    // Re-calculate heights on window resize
+    window.addEventListener('resize', setEqualHeight);
 };
 
 // Run on page load
