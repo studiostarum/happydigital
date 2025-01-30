@@ -1,17 +1,14 @@
 {
-  "name": "webflow-scripts",
+  "name": "happydigital",
+  "private": true,
   "version": "1.0.0",
-  "description": "Custom JavaScript enhancements for Webflow",
-  "main": "dist/webflow-bundle.min.js",
+  "type": "module",
   "scripts": {
-    "build": "webpack --mode production",
-    "watch": "webpack --mode development --watch"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "keywords": ["webflow", "javascript"],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "webpack": "^5.88.0",
-    "webpack-cli": "^5.1.4"
+    "vite": "^5.0.0"
   }
 }
