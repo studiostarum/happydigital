@@ -6,25 +6,33 @@ export function initCourseAccordion() {
     console.log('Current Link:', currentLink);
 
     if (currentLink) {
-        // Find the parent accordion container
-        const accordionContainer = currentLink.closest('[data-accordion]');
-        console.log('Parent Container:', accordionContainer);
+        // Find all parent accordions (there might be nested ones)
+        let element = currentLink;
+        const parentAccordions = [];
+        
+        while (element) {
+            const accordion = element.closest('[data-accordion]');
+            if (!accordion) break;
+            parentAccordions.push(accordion);
+            element = accordion.parentElement;
+        }
+        
+        console.log('Parent Accordions found:', parentAccordions.length);
 
-        if (accordionContainer) {
-            // First close any open accordions
-            const openAccordions = document.querySelectorAll('[data-accordion][data-open]');
-            console.log('Open Accordions:', openAccordions.length);
-            
-            openAccordions.forEach(accordion => {
-                if (accordion !== accordionContainer) {
+        if (parentAccordions.length > 0) {
+            // Close all accordions first
+            document.querySelectorAll('[data-accordion][data-open]').forEach(accordion => {
+                if (!parentAccordions.includes(accordion)) {
                     closeAccordion(accordion);
                 }
             });
             
-            // Then open the current one
-            openAccordion(accordionContainer);
+            // Open all parent accordions from top to bottom
+            parentAccordions.reverse().forEach(accordion => {
+                openAccordion(accordion);
+            });
         } else {
-            console.log('No accordion container found for current link');
+            console.log('No accordion containers found for current link');
         }
     } else {
         console.log('No current link found. HTML of first link:', {
@@ -49,8 +57,10 @@ function handleAccordionClick(event) {
 
     const isOpen = accordionContainer.hasAttribute('data-open');
     
-    // Close all other accordions
-    document.querySelectorAll('[data-accordion][data-open]').forEach(accordion => {
+    // Close all other accordions at the same level
+    const parent = accordionContainer.parentElement;
+    const siblings = parent.querySelectorAll('[data-accordion]');
+    siblings.forEach(accordion => {
         if (accordion !== accordionContainer) {
             closeAccordion(accordion);
         }
