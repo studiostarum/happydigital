@@ -1,11 +1,11 @@
-import { initCourseAccordion } from './modules/courseAccordion';
 import { initCustomSelect } from './modules/customSelect';
 import { initCategoryIndex } from './modules/categoryIndex';
 import { initCarouselHeight } from './modules/carouselHeightFix';
+import { initCurrentPageAccordion } from './modules/currentPageAccordion';
 
 document.addEventListener('DOMContentLoaded', () => {
-    initCourseAccordion();
     initCustomSelect();
     initCategoryIndex();
     initCarouselHeight();
+    initCurrentPageAccordion();
 });
