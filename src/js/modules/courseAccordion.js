@@ -1,6 +1,8 @@
 export function initCourseAccordion() {
-    // Find any link that's currently active
-    const currentLink = document.querySelector('.course_sublink.w--current');
+    // Find the current link by matching href with current path
+    const currentPath = window.location.pathname;
+    const currentLink = document.querySelector(`.course_sublink[href="${currentPath}"]`);
+    console.log('Current path:', currentPath);
     console.log('Current link found:', currentLink);
 
     if (currentLink) {
