@@ -1,18 +1,26 @@
 export function initCourseAccordion() {
-    // Find the current active link
-    const currentLink = document.querySelector('.course_sublink.w--current');
+    // Find the current active link (handle both data-attribute and Webflow's current class)
+    const currentLink = document.querySelector('[data-accordion-link].w--current, .course_sublink.w--current');
 
     if (currentLink) {
         // Find the parent accordion container
         const accordionContainer = currentLink.closest('[data-accordion]');
 
         if (accordionContainer) {
+            // First close any open accordions
+            document.querySelectorAll('[data-accordion][data-open]').forEach(accordion => {
+                if (accordion !== accordionContainer) {
+                    closeAccordion(accordion);
+                }
+            });
+            
+            // Then open the current one
             openAccordion(accordionContainer);
         }
     }
 
-    // Add click handlers to all accordion headers
-    document.querySelectorAll('[data-accordion] > .course_link-wrapper').forEach(trigger => {
+    // Add click handlers to all accordion triggers
+    document.querySelectorAll('[data-accordion-trigger]').forEach(trigger => {
         trigger.addEventListener('click', handleAccordionClick);
     });
 }
@@ -39,8 +47,8 @@ function handleAccordionClick(event) {
 }
 
 function openAccordion(accordionContainer) {
-    const content = accordionContainer.querySelector('.course_sublinks-wrapper');
-    const icon = accordionContainer.querySelector('.course_link-icon');
+    const content = accordionContainer.querySelector('[data-accordion-content]');
+    const icon = accordionContainer.querySelector('[data-accordion-icon]');
     
     if (content) {
         const actualHeight = content.scrollHeight;
@@ -55,8 +63,8 @@ function openAccordion(accordionContainer) {
 }
 
 function closeAccordion(accordionContainer) {
-    const content = accordionContainer.querySelector('.course_sublinks-wrapper');
-    const icon = accordionContainer.querySelector('.course_link-icon');
+    const content = accordionContainer.querySelector('[data-accordion-content]');
+    const icon = accordionContainer.querySelector('[data-accordion-icon]');
     
     if (content) {
         content.style.height = '0px';
