@@ -1,19 +1,26 @@
 export function initCourseAccordion() {
     // Find any link that's currently active
-    const currentLink = document.querySelector('.w--current');
+    const currentLink = document.querySelector('.course_sublink.w--current');
+    console.log('Current link found:', currentLink);
 
     if (currentLink) {
-        // Find the parent accordion content wrapper
-        const accordionContent = currentLink.closest('.course_sublinks-wrapper');
-        if (accordionContent) {
-            // Find the parent accordion container
-            const accordion = accordionContent.closest('.course_link');
-            if (accordion) {
-                // Open this accordion
-                const content = accordion.querySelector('.course_sublinks-wrapper');
-                if (content) {
-                    content.style.height = `${content.scrollHeight}px`;
-                }
+        // Find the parent accordion by traversing up through w-dyn-* elements
+        let element = currentLink;
+        while (element && !element.classList.contains('course_link')) {
+            element = element.parentElement;
+        }
+        
+        const accordion = element;
+        console.log('Parent accordion found:', accordion);
+
+        if (accordion) {
+            // Open this accordion
+            const content = accordion.querySelector('.course_sublinks-wrapper');
+            console.log('Content to open:', content);
+            
+            if (content) {
+                content.style.height = `${content.scrollHeight}px`;
+                
                 const icon = accordion.querySelector('.course_link-icon');
                 if (icon) {
                     icon.style.transform = 'rotate(180deg)';
@@ -31,6 +38,9 @@ export function initCourseAccordion() {
 }
 
 function handleAccordionClick(event) {
+    // Prevent click from bubbling to parent accordions
+    event.stopPropagation();
+    
     const accordion = event.currentTarget;
     const content = accordion.querySelector('.course_sublinks-wrapper');
     const icon = accordion.querySelector('.course_link-icon');
