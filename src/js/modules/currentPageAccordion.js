@@ -13,17 +13,22 @@ export const initCurrentPageAccordion = () => {
         const sublinksWrapper = accordionItem.querySelector('.course_sublinks-wrapper');
         const arrowIcon = accordionItem.querySelector('.course_link-icon');
         const sublinks = accordionItem.querySelector('.course_sublinks');
+        const accordionTrigger = accordionItem.querySelector('.course_link-wrapper');
         
-        if (sublinksWrapper && arrowIcon && sublinks) {
-          // Force a reflow to ensure correct height calculation
-          sublinksWrapper.style.display = 'block';
-          const sublinksHeight = sublinks.offsetHeight;
+        if (sublinksWrapper && arrowIcon && sublinks && accordionTrigger) {
+          // Temporarily remove Webflow's click listener
+          const oldTrigger = accordionTrigger.cloneNode(true);
+          accordionTrigger.parentNode.replaceChild(oldTrigger, accordionTrigger);
           
-          // Set the height to show the content
-          requestAnimationFrame(() => {
-            sublinksWrapper.style.height = `${sublinksHeight}px`;
-            arrowIcon.style.transform = 'rotate(180deg)';
-          });
+          // Calculate height and open accordion
+          const sublinksHeight = sublinks.offsetHeight;
+          sublinksWrapper.style.height = `${sublinksHeight}px`;
+          arrowIcon.style.transform = 'rotate(180deg)';
+          
+          // Reattach Webflow's listeners after a short delay
+          setTimeout(() => {
+            window.Webflow && window.Webflow.require('ix2').init();
+          }, 50);
         }
       }
     }
