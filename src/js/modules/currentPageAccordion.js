@@ -1,36 +1,41 @@
 export const initCurrentPageAccordion = () => {
-  // Ensure content is loaded before calculating heights
+  // Wait for a small delay after load to ensure Webflow's JS is initialized
   window.addEventListener('load', () => {
-    // Find the current active link
-    const currentLink = document.querySelector('.course_sublink.w--current');
-    
-    if (currentLink) {
-      // Find the parent accordion item
-      const accordionItem = currentLink.closest('.course_curriculum_item');
+    setTimeout(() => {
+      // Find the current active link
+      const currentLink = document.querySelector('.course_sublink.w--current');
       
-      if (accordionItem) {
-        // Find the sublinks wrapper that needs to be opened
-        const sublinksWrapper = accordionItem.querySelector('.course_sublinks-wrapper');
-        const arrowIcon = accordionItem.querySelector('.course_link-icon');
-        const sublinks = accordionItem.querySelector('.course_sublinks');
-        const accordionTrigger = accordionItem.querySelector('.course_link-wrapper');
+      if (currentLink) {
+        // Find the parent accordion item
+        const accordionItem = currentLink.closest('.course_curriculum_item');
         
-        if (sublinksWrapper && arrowIcon && sublinks && accordionTrigger) {
-          // Temporarily remove Webflow's click listener
-          const oldTrigger = accordionTrigger.cloneNode(true);
-          accordionTrigger.parentNode.replaceChild(oldTrigger, accordionTrigger);
+        if (accordionItem) {
+          // Find the sublinks wrapper that needs to be opened
+          const sublinksWrapper = accordionItem.querySelector('.course_sublinks-wrapper');
+          const arrowIcon = accordionItem.querySelector('.course_link-icon');
+          const sublinks = accordionItem.querySelector('.course_sublinks');
           
-          // Calculate height and open accordion
-          const sublinksHeight = sublinks.offsetHeight;
-          sublinksWrapper.style.height = `${sublinksHeight}px`;
-          arrowIcon.style.transform = 'rotate(180deg)';
-          
-          // Reattach Webflow's listeners after a short delay
-          setTimeout(() => {
-            window.Webflow && window.Webflow.require('ix2').init();
-          }, 50);
+          if (sublinksWrapper && arrowIcon && sublinks) {
+            // First set transition to none to prevent animation on load
+            sublinksWrapper.style.transition = 'none';
+            
+            // Calculate height and open accordion
+            const sublinksHeight = sublinks.offsetHeight;
+            
+            // Force a reflow before applying changes
+            void sublinksWrapper.offsetHeight;
+            
+            // Apply changes
+            sublinksWrapper.style.height = `${sublinksHeight}px`;
+            arrowIcon.style.transform = 'rotate(180deg)';
+            
+            // Restore transition after a brief delay
+            setTimeout(() => {
+              sublinksWrapper.style.transition = '';
+            }, 50);
+          }
         }
       }
-    }
+    }, 100); // Small delay to ensure everything is ready
   });
 }; 
