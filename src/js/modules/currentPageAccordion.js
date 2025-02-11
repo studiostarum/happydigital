@@ -1,19 +1,11 @@
 export const initCurrentPageAccordion = () => {
-  const DEBUG = true; // Set to true to enable debugging
+  const DEBUG = false; // Set to true to enable debugging
   
   const debug = (message, element = null) => {
     if (!DEBUG) return;
     console.log(`[Accordion Debug] ${message}`);
     if (element) {
       console.log(element);
-      // Veilig checken of het element bestaat en een style object heeft
-      if (element instanceof Element) {
-        const originalBackground = element.style.backgroundColor || '';
-        element.style.backgroundColor = '#ff00ff50';
-        setTimeout(() => {
-          element.style.backgroundColor = originalBackground;
-        }, 1000);
-      }
     }
   };
 
@@ -26,26 +18,35 @@ export const initCurrentPageAccordion = () => {
       // Find all the necessary elements within THIS accordion item
       const sublinksWrapper = accordionItem.querySelector('.course_sublinks-wrapper');
       const arrowIcon = accordionItem.querySelector('.course_link-icon');
-      const sublinks = accordionItem.querySelector('.course_sublinks');
       
       debug('Found elements in current accordion:', {
         sublinksWrapper,
-        arrowIcon,
-        sublinks
+        arrowIcon
       });
       
-      if (sublinksWrapper && arrowIcon && sublinks) {
+      if (sublinksWrapper && arrowIcon) {
+        if (accordionItem.classList.contains('is-active')) {
+          debug('Accordion already open, ensuring sublinks are visible...');
+          // Ensure sublinks are visible
+          sublinksWrapper.style.display = 'block';
+          sublinksWrapper.style.height = 'auto';
+          arrowIcon.style.transform = 'rotate(180deg)';
+          currentLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          return;
+        }
+        
         debug('All required elements found, opening accordion...');
         
-        // Trigger Webflow's click event op de accordion trigger
+        // Trigger Webflow's click event on the accordion trigger
         const accordionTrigger = accordionItem.querySelector('.course_curriculum_link, .course_link-wrapper');
         if (accordionTrigger) {
-          // Simuleer een click om Webflow's animatie te triggeren
+          // Simulate a click to trigger Webflow's animation
           accordionTrigger.click();
           
-          // Wacht tot de animatie klaar is en zorg dat de accordion open blijft
+          // Wait for the animation to complete and keep the accordion open
           setTimeout(() => {
-            // Zet de height op 'auto' zoals Webflow dat ook doet
+            // Set the height to 'auto' as Webflow does
+            sublinksWrapper.style.display = 'block';
             sublinksWrapper.style.height = 'auto';
             arrowIcon.style.transform = 'rotate(180deg)';
             
@@ -55,7 +56,7 @@ export const initCurrentPageAccordion = () => {
             // Scroll the active link into view smoothly
             currentLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             debug('Accordion opened and scrolled into view');
-          }, 300); // Wacht op de Webflow animatie (meestal 300ms)
+          }, 300); // Wait for Webflow animation (usually 300ms)
         }
         
         debug('Applied all styles and classes');
@@ -63,7 +64,7 @@ export const initCurrentPageAccordion = () => {
         // Handle window resize
         const handleResize = () => {
           if (accordionItem.classList.contains('is-active')) {
-            // Behoud 'auto' height bij resize
+            // Maintain 'auto' height on resize
             sublinksWrapper.style.height = 'auto';
           }
         };
@@ -73,8 +74,7 @@ export const initCurrentPageAccordion = () => {
       } else {
         debug('❌ Missing required elements:', {
           hasSublinksWrapper: !!sublinksWrapper,
-          hasArrowIcon: !!arrowIcon,
-          hasSublinks: !!sublinks
+          hasArrowIcon: !!arrowIcon
         });
       }
     } else {
@@ -82,7 +82,7 @@ export const initCurrentPageAccordion = () => {
     }
   };
 
-  // Wacht tot Webflow's eigen scripts geladen zijn
+  // Wait for Webflow's own scripts to load
   window.Webflow = window.Webflow || [];
   window.Webflow.push(() => {
     debug('Webflow initialized, starting accordion...');
@@ -96,7 +96,7 @@ export const initCurrentPageAccordion = () => {
       return;
     }
 
-    // Open de accordion na een korte vertraging
+    // Open the accordion after a short delay
     setTimeout(() => {
       openAccordion(currentLink);
     }, 100);
