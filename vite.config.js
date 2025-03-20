@@ -7,17 +7,16 @@ export default defineConfig({
     outDir: '../dist',
     emptyOutDir: true,
     rollupOptions: {
-      input: 'src/js/main.js',
+      input: resolve(__dirname, 'src/index.html'),
       output: {
-        entryFileNames: 'bundle.min.js',
+        entryFileNames: 'assets/[name].min.js',
+        chunkFileNames: 'assets/[name].min.js',
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
-            return 'bundle.min.css';
+            return 'assets/[name].min.css';
           }
           return 'assets/[name]-[hash][extname]';
-        },
-        manualChunks: undefined,
-        inlineDynamicImports: true
+        }
       }
     },
     cssCodeSplit: false,
@@ -39,8 +38,7 @@ export default defineConfig({
   css: {
     modules: false,
     postcss: {
-      minimize: true,
-      minify: true
+      minimize: true
     }
   },
   server: {
