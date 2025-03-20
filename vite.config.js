@@ -2,12 +2,12 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
-  root: 'src',
+  root: '.',
   build: {
-    outDir: '../dist',
+    outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
-      input: resolve(__dirname, 'src/index.html'),
+      input: resolve(__dirname, 'index.html'),
       output: {
         entryFileNames: 'assets/[name].min.js',
         chunkFileNames: 'assets/[name].min.js',
